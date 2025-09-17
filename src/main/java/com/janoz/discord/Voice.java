@@ -38,7 +38,7 @@ public class Voice {
         sampleRepository = new SampleRepository(playerManager);
         botManager = new BotManager(jda);
         voiceConnectionService = new VoiceConnectionService(jda, playerManager);
-        new DisconnectingTask(voiceConnectionService).run();
+        DisconnectingTask.startRunning(voiceConnectionService);
     }
 
     public Voice(String token) {
