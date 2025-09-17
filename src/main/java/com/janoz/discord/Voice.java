@@ -79,7 +79,9 @@ public class Voice {
     }
 
     /**
-     * Remove all audio samples.
+     * Clears all audio samples from the sample repository.
+     * This method removes all audio samples currently stored in the repository,
+     * effectively resetting the sample repository to an empty state.
      */
     public void clearSamples() {
         sampleRepository.clear();
