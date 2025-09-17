@@ -30,8 +30,5 @@ jobs:
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Deploy to GitHub Packages
-        run: mvn -B deploy --file pom.xml
+      - name: Build and deploy with Maven
+        run: mvn -B clean package deploy --file pom.xml
