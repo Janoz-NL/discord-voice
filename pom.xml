@@ -6,7 +6,7 @@
 
     <groupId>com.janoz.discord</groupId>
     <artifactId>discord-voice</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>JGITVER</version>
     <name>Discord Voice</name>
     <description>JDA/LavaPlayer wrapper to easily play sounds in Discord voice channels</description>
 
