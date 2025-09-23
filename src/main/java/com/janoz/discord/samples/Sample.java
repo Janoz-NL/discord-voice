@@ -31,4 +31,8 @@ public class Sample implements com.janoz.discord.domain.Sample {
         return sample;
     }
 
+    public void setPack(Pack pack) {
+        this.pack = pack;
+        pack.getSamples().add(this);
+    }
 }

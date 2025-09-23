@@ -1,4 +1,4 @@
-package com.janoz.discord.services;
+package com.janoz.discord.discord;
 
 import com.janoz.discord.samples.Sample;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;

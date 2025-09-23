@@ -1,4 +1,4 @@
-package com.janoz.discord.services;
+package com.janoz.discord.discord;
 
 import com.janoz.discord.domain.Activity;
 import lombok.RequiredArgsConstructor;

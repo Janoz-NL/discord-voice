@@ -1,4 +1,4 @@
-package com.janoz.discord.services;
+package com.janoz.discord.discord;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
