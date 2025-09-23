@@ -68,14 +68,14 @@ public class Voice {
     }
 
     /**
-     * Reads and initializes audio samples from the specified folder.
+     * Reads and initializes audio samples from the specified directory.
      * The method processes files with supported audio formats such as mp3 and wav
      * and updates the sample repository with the loaded samples.
      *
-     * @param sampleFolder the path to the folder containing audio sample files
+     * @param sampleDirectory the path to the directory containing audio sample files
      */
-    public void readSamples(String sampleFolder) {
-        sampleRepository.readSamples(sampleFolder);
+    public void readSamples(String sampleDirectory) {
+        sampleRepository.readSamples(sampleDirectory);
     }
 
     /**

@@ -43,19 +43,19 @@ public class SampleRepository {
         samples.clear();
     }
 
-    public void readSamples(String sampleFolder) {
-        log.info("Loading samples from {}.", sampleFolder);
-        File folder = new File(sampleFolder);
-        if (folder.exists() && folder.isDirectory()) {
-            Arrays.stream(Objects.requireNonNull(folder
+    public void readSamples(String sampleDirectory) {
+        log.info("Loading samples from {}.", sampleDirectory);
+        File directory = new File(sampleDirectory);
+        if (directory.exists() && directory.isDirectory()) {
+            Arrays.stream(Objects.requireNonNull(directory
                             .listFiles((file, s) ->
                                     s.toLowerCase(Locale.ROOT).endsWith(".mp3") ||
                                     s.toLowerCase(Locale.ROOT).endsWith(".wav")
                             )))
                             .forEach(this::read);
-            log.info("{} samples loaded from '{}'.", samples.size(), sampleFolder);
+            log.info("{} samples loaded from '{}'.", samples.size(), sampleDirectory);
         } else {
-            log.error("'{}' doesn't exist or isn't a folder. No samples loaded!", sampleFolder);
+            log.error("'{}' doesn't exist or isn't a directory. No samples loaded!", sampleDirectory);
             throw new IllegalStateException("Unable to initialize sample repository");
         }
    }
