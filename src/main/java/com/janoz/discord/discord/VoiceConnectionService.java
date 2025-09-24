@@ -1,4 +1,4 @@
-package com.janoz.discord.services;
+package com.janoz.discord.discord;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import lombok.RequiredArgsConstructor;

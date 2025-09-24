@@ -1,7 +1,7 @@
 package com.janoz.discord.tasks;
 
-import com.janoz.discord.services.VoiceConnection;
-import com.janoz.discord.services.VoiceConnectionService;
+import com.janoz.discord.discord.VoiceConnection;
+import com.janoz.discord.discord.VoiceConnectionService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Timer;
