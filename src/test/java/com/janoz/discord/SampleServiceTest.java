@@ -36,7 +36,7 @@ public class SampleServiceTest {
             assertThat(new File(f, "5.txt")).hasContent("Zus");
         };
 
-        cut.readSamplesZip("testData/Archive.zip");
+        cut.readSamplesZip(this.getClass().getClassLoader().getResourceAsStream("Archive.zip"));
 
         File f = new File(tmpDirHolder.iterator().next());
         assertThat(f).doesNotExist();
