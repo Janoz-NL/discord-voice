@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public interface DiscordService {
     /**
      * Sets the bot's activity to the specified activity.

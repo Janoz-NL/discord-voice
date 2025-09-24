@@ -5,11 +5,13 @@ import com.janoz.discord.domain.Sample;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@SuppressWarnings("unused")
 public interface SampleService
 {
     /**
@@ -25,20 +27,28 @@ public interface SampleService
      * @param sampleZip the zipfile containing audio sample files
      */
     default void readSamplesZip(String sampleZip) throws IOException {
+        readSamplesZip(new FileInputStream(sampleZip));
+    }
+
+    /**
+     * Reads and initializes audio samples from the specified zipfile stream.
+     * @see #readSamplesZip(String)
+     *
+     * @param zipStream InputStream of an opened zipfile
+     */
+    default void readSamplesZip(InputStream zipStream) throws IOException {
         File tempDir = Files.createTempDirectory("discord-voic-samples").toFile();
         tempDir.deleteOnExit();
-        System.out.println(tempDir.getAbsolutePath());
-        ZipInputStream zis = new ZipInputStream(new FileInputStream(sampleZip));
+        ZipInputStream zis = new ZipInputStream(zipStream);
         ZipEntry zipEntry = zis.getNextEntry();
         while (zipEntry != null) {
             if (zipEntry.isDirectory()) {continue;}
             File file = new File(tempDir, zipEntry.getName());
-            if (!file.getParentFile().exists()) {
-                System.out.println("File not in root ignored " + zipEntry.getName());
+            if (file.getParentFile().exists()) {
+                Files.copy(zis, file.toPath());
+                file.deleteOnExit();
             }
-            Files.copy(zis, file.toPath());
             zis.closeEntry();
-            file.deleteOnExit();
             zipEntry = zis.getNextEntry();
         }
         readSamples(tempDir.getAbsolutePath(), () -> {
@@ -65,6 +75,21 @@ public interface SampleService
         readSamples(sampleDirectory, () -> {});
     }
 
+    /**
+     * Reads and initializes audio samples from the specified directory.
+     * The method processes files with supported audio formats such as mp3, aac,
+     * ogg and wav and updates the sample repository with the loaded samples.
+     * <p>
+     * If a single audio file contains multiple samples the file should be
+     * accompanied by a metadata file containing at least the sample name,
+     * start and length.
+     * <p>
+     * Subdirectories are not supported
+     *
+     * @param sampleDirectory the path to the directory containing audio sample files
+     * @param afterLoaded     a callback function to be executed after the samples
+     *                        have been loaded
+     */
     void readSamples(String sampleDirectory, Runnable afterLoaded);
 
     /**

@@ -96,13 +96,14 @@ public class SampleRepository {
             JsonNode rootNode = objectMapper.readTree(metadataFile);
             String packName = rootNode.get("name").asText();
             log.info("Reading " + packName);
+            String info = rootNode.optional("info").map(JsonNode::asText).orElse(null);
             String mainId = rootNode.optional("id")
                     .map(JsonNode::asText)
                     .orElse(""+packName.hashCode());
-
             Pack pack = Pack.builder()
                     .id(mainId)
                     .name(packName)
+                    .info(info)
                     .build();
             packs.put(pack.getId(), pack);
             for (JsonNode jsonSample : rootNode.get("samples")) {

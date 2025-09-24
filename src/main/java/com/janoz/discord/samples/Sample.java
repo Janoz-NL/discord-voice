@@ -25,6 +25,10 @@ public class Sample implements com.janoz.discord.domain.Sample {
         return errorMessage!=null;
     }
 
+    public boolean isLoaded() {
+        return isValid() && !isInvalid();
+    }
+
     public AudioTrack getSample() {
         AudioTrack sample = this.sample.makeClone();
         sample.setPosition(start);
