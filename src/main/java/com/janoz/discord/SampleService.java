@@ -37,7 +37,7 @@ public interface SampleService
      * @param zipStream InputStream of an opened zipfile
      */
     default void readSamplesZip(InputStream zipStream) throws IOException {
-        File tempDir = Files.createTempDirectory("discord-voic-samples").toFile();
+        File tempDir = Files.createTempDirectory("discord-voice-samples").toFile();
         tempDir.deleteOnExit();
         ZipInputStream zis = new ZipInputStream(zipStream);
         ZipEntry zipEntry = zis.getNextEntry();
@@ -51,12 +51,7 @@ public interface SampleService
             zis.closeEntry();
             zipEntry = zis.getNextEntry();
         }
-        readSamples(tempDir.getAbsolutePath(), () -> {
-            for(File file : tempDir.listFiles()) {
-                file.delete();
-            }
-            tempDir.delete();
-        });
+        readSamples(tempDir.getAbsolutePath());
     }
 
     /**
