@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.List;
+import java.util.Collection;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -99,7 +99,7 @@ public interface SampleService
      *
      * @return a list of Sample objects representing the available audio samples
      */
-    List<Sample> getSamples();
+    Collection<Sample> getSamples();
 
     /**
      * Retrieves an audio sample by its unique identifier.

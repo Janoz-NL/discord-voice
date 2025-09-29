@@ -1,5 +1,8 @@
-package com.janoz.discord;
+package com.janoz.discord.impl;
 
+import com.janoz.discord.DiscordService;
+import com.janoz.discord.SampleService;
+import com.janoz.discord.VoiceContext;
 import com.janoz.discord.domain.Activity;
 import com.janoz.discord.domain.Guild;
 import com.janoz.discord.domain.Sample;
@@ -23,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Slf4j
-public class Voice implements SampleService, DiscordService {
+public class Voice implements SampleService, DiscordService, VoiceContext {
 
     @Getter // at least make JDA available to the outside
     private final JDA jda;
@@ -45,10 +48,12 @@ public class Voice implements SampleService, DiscordService {
         this(initJDA(token));
     }
 
+    @Override
     public DiscordService getDiscordService() {
         return this;
     }
 
+    @Override
     public SampleService getSampleService() {
         return this;
     }
@@ -74,7 +79,7 @@ public class Voice implements SampleService, DiscordService {
     }
 
     @Override
-    public List<Sample> getSamples() {
+    public Collection<Sample> getSamples() {
         return sampleRepository.getSamples().stream()
                 .map(s -> (Sample)s)
                 .toList();
