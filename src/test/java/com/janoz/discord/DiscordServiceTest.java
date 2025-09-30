@@ -117,6 +117,16 @@ class DiscordServiceTest {
         }
 
         @Override
+        public Guild getGuild(long guildId) {
+            return null;
+        }
+
+        @Override
+        public VoiceChannel getVoiceChannel(long channelId) {
+            return null;
+        }
+
+        @Override
         public boolean connect(long guildId, long voiceChannelId) {
             method = "connect";
             this.guildId = guildId;

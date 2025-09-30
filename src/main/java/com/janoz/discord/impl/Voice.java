@@ -18,12 +18,13 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
 @Slf4j
 public class Voice implements SampleService, DiscordService, VoiceContext {
@@ -92,24 +93,43 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
 
     @Override
     public Collection<Guild> getGuilds() {
-        List<Guild> result = new ArrayList<>();
-        jda.getGuilds().forEach(jdag -> {
-            Guild guild = Guild.builder()
-                    .id(jdag.getIdLong())
-                    .name(jdag.getName())
+        return jda.getGuilds().stream().map(Voice::getGuild).toList();
+    }
+
+    private static Guild getGuild(net.dv8tion.jda.api.entities.Guild jdag) {
+        Guild guild = Guild.builder()
+                .id(jdag.getIdLong())
+                .name(jdag.getName())
+                .build();
+        jdag.getVoiceChannels().forEach(jdavc -> {
+            VoiceChannel vc = VoiceChannel.builder()
+                    .guild(guild)
+                    .id(jdavc.getIdLong())
+                    .name(jdavc.getName())
+                    .connected(jdavc == jdavc.getGuild().getAudioManager().getConnectedChannel())
                     .build();
-            jdag.getVoiceChannels().forEach(jdavc -> {
-                VoiceChannel vc = VoiceChannel.builder()
-                        .guild(guild)
-                        .id(jdavc.getIdLong())
-                        .name(jdavc.getName())
-                        .connected(jdavc == jdavc.getGuild().getAudioManager().getConnectedChannel())
-                        .build();
-                guild.getVoiceChannels().add(vc);
-            });
-            result.add(guild);
+            guild.getVoiceChannels().add(vc);
         });
-        return result;
+        return guild;
+    }
+
+    @Override
+    public Guild getGuild(long guildId) {
+        return Optional.ofNullable(jda.getGuildById(guildId))
+                .map(Voice::getGuild)
+                .orElse(null);
+    }
+
+    @Override
+    public VoiceChannel getVoiceChannel(long channelId) {
+        return Optional.ofNullable(jda.getChannelById(GuildChannel.class, channelId))
+                .map(GuildChannel::getGuild)
+                .map(Voice::getGuild)
+                .map(Guild::getVoiceChannels)
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(vc -> vc.getId() == channelId)
+                .findAny().orElse(null);
     }
 
     @Override
@@ -154,4 +174,5 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
         }
         return jda;
     }
+
 }

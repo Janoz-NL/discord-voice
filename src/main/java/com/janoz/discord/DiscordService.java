@@ -36,6 +36,30 @@ public interface DiscordService {
      */
     Collection<Guild> getGuilds();
 
+
+    /**
+     * Retrieves the Guild object associated with the specified guild ID.
+     * The Guild object represents a Discord guild (server) and contains
+     * details about the guild, including its name and associated voice channels.
+     *
+     * @param guildId the unique identifier of the guild to retrieve
+     * @return the Guild object corresponding to the given guild ID, or null
+     * if no matching guild is found or the guild is not available to the bot
+     */
+    Guild getGuild(long guildId);
+
+
+    /**
+     * Retrieves the voice channel associated with the specified channel ID.
+     * If the voice channel exists, it will be returned; otherwise, the method
+     * may return null or handle it as appropriate.
+     *
+     * @param channelId the unique identifier of the voice channel to retrieve
+     * @return the VoiceChannel object corresponding to the specified channel ID,
+     * or null if none exists or the channel is not available to the bot
+     */
+    VoiceChannel getVoiceChannel(long channelId);
+
     /**
      * Connects to the specified voice channel. If the bot is already connected to another
      * voice channel in the same guild, it will disconnect from the current one and connect
@@ -61,6 +85,11 @@ public interface DiscordService {
         disconnect(guild.getId());
     }
 
+    /**
+     * Disconnects the bot from the voice channel in the guild specified by the guild ID.
+     *
+     * @param guildId the unique identifier of the guild from which the bot should disconnect its voice connection
+     */
     void disconnect(long guildId);
 
     /**
@@ -92,7 +121,18 @@ public interface DiscordService {
      * @param voiceChannel the voice channel where the sample will be played
      */
     default void play(Sample sample, VoiceChannel voiceChannel) {
-        String sampleId = sample.getId();
+        play(sample.getId(), voiceChannel);
+    }
+
+    /**
+     * Plays an audio sample in the specified voice channel.
+     * If the bot is not already connected to the voice channel,
+     * it will attempt to connect before playing.
+     *
+     * @param sampleId the id of the audio sample to be played
+     * @param voiceChannel the voice channel where the sample will be played
+     */
+    default void play(String sampleId, VoiceChannel voiceChannel) {
         long guildId = voiceChannel.getGuild().getId();
         long voiceChannelId = voiceChannel.getId();
         play(sampleId, guildId, voiceChannelId);
@@ -108,5 +148,12 @@ public interface DiscordService {
      */
     void play(String sampleId, long guildId, long voiceChannelId);
 
+    /**
+     * Retrieves the JDA (Java Discord API) instance associated with the bot.
+     * The JDA instance provides access to various Discord functionality, including
+     * interacting with guilds, channels, and members.
+     *
+     * @return the JDA instance representing the bot's connection to Discord
+     */
     JDA getJda();
 }
