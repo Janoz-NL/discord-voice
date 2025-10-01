@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -70,8 +71,8 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
     }
 
     @Override
-    public void readSamples(String sampleDirectory, Runnable afterLoaded) {
-        sampleRepository.readSamples(sampleDirectory, afterLoaded);
+    public void readSamples(String prefix, File sampleDirectory) {
+        sampleRepository.readSamples(prefix, sampleDirectory);
     }
 
     @Override

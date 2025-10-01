@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 public class Sample implements com.janoz.discord.domain.Sample {
 
-    private Pack pack;
     private String id;
     private String name;
     private AudioTrack sample;
@@ -33,10 +32,5 @@ public class Sample implements com.janoz.discord.domain.Sample {
         AudioTrack sample = this.sample.makeClone();
         sample.setPosition(start);
         return sample;
-    }
-
-    public void setPack(Pack pack) {
-        this.pack = pack;
-        pack.getSamples().add(this);
     }
 }

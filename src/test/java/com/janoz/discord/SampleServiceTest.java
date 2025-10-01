@@ -20,20 +20,19 @@ public class SampleServiceTest {
 
     @Test
     void testReadSamplesZip() throws IOException{
-        Set<String> tmpDirHolder = new HashSet<>();
+        Set<File> tmpDirHolder = new HashSet<>();
 
 
         cut.readValidator = direcotry -> {
             tmpDirHolder.add(direcotry);
-            File f = new File(direcotry);
-            assertThat(f).exists();
-            assertThat(f).isDirectory();
+            assertThat(direcotry).exists();
+            assertThat(direcotry).isDirectory();
 
-            assertThat(Arrays.stream(f.listFiles()).map(File::getName).toList())
+            assertThat(Arrays.stream(direcotry.listFiles()).map(File::getName).toList())
                     .containsExactlyInAnyOrder(
                             "1.txt","2.txt","3.txt","4.txt","5.txt"
                             );
-            assertThat(new File(f, "5.txt")).hasContent("Zus");
+            assertThat(new File(direcotry, "5.txt")).hasContent("Zus");
         };
 
         cut.readSamplesZip(this.getClass().getClassLoader().getResourceAsStream("Archive.zip"));
@@ -45,7 +44,7 @@ public class SampleServiceTest {
         AtomicBoolean ran = new AtomicBoolean(false);
         cut.readValidator = direcotry -> {
             ran.set(true);
-            assertThat(direcotry).isEqualTo("testDirectory");
+            assertThat(direcotry).isEqualTo(new File("testDirectory"));
         };
 
         cut.readSamples("testDirectory");
@@ -56,12 +55,11 @@ public class SampleServiceTest {
 
     static class SampleServiceImpl implements SampleService {
 
-        Consumer<String> readValidator;
+        Consumer<File> readValidator;
 
         @Override
-        public void readSamples(String sampleDirectory, Runnable afterLoaded) {
+        public void readSamples(String prefix, File sampleDirectory) {
             readValidator.accept(sampleDirectory);
-            afterLoaded.run();
         }
 
         @Override

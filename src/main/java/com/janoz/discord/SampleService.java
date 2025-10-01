@@ -27,7 +27,8 @@ public interface SampleService
      * @param sampleZip the zipfile containing audio sample files
      */
     default void readSamplesZip(String sampleZip) throws IOException {
-        readSamplesZip(new FileInputStream(sampleZip));
+        File f = new File(sampleZip);
+        readSamplesZip(f.getName(), new FileInputStream(f));
     }
 
     /**
@@ -37,6 +38,10 @@ public interface SampleService
      * @param zipStream InputStream of an opened zipfile
      */
     default void readSamplesZip(InputStream zipStream) throws IOException {
+        readSamplesZip("",zipStream);
+    }
+
+    default void readSamplesZip(String idPrefix, InputStream zipStream) throws IOException {
         File tempDir = Files.createTempDirectory("discord-voice-samples").toFile();
         tempDir.deleteOnExit();
         ZipInputStream zis = new ZipInputStream(zipStream);
@@ -62,30 +67,28 @@ public interface SampleService
      * If a single audio file contains multiple samples the file should be acompanied
      * by a metadata file containing at least the sample name, start and length.
      * <p>
-     * Subdirectories are not supported
      *
      * @param sampleDirectory the path to the directory containing audio sample files
      */
     default void readSamples(String sampleDirectory) {
-        readSamples(sampleDirectory, () -> {});
+        readSamples("",new File(sampleDirectory));
     }
 
     /**
      * Reads and initializes audio samples from the specified directory.
      * The method processes files with supported audio formats such as mp3, aac,
-     * ogg and wav and updates the sample repository with the loaded samples.
+     * ogg, and wav and updates the sample repository with the loaded samples.
      * <p>
-     * If a single audio file contains multiple samples the file should be
+     * The prefix is added to the sampleId's
+     * <p>
+     * If a single audio file contains multiple samples, the file should be
      * accompanied by a metadata file containing at least the sample name,
-     * start and length.
-     * <p>
-     * Subdirectories are not supported
+     * start, and length.
      *
+     * @param prefix a unique prefix applied to the identifiers of the loaded samples
      * @param sampleDirectory the path to the directory containing audio sample files
-     * @param afterLoaded     a callback function to be executed after the samples
-     *                        have been loaded
      */
-    void readSamples(String sampleDirectory, Runnable afterLoaded);
+    void readSamples(String prefix, File sampleDirectory);
 
     /**
      * Clears all audio samples from the sample repository.
