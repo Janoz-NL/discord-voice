@@ -30,6 +30,7 @@ public class VoiceConnection {
         audioManager = guild.getAudioManager();
         player = playerManager.createPlayer();
         audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
+        lastInteraction = System.currentTimeMillis();
     }
 
     /**
@@ -53,7 +54,7 @@ public class VoiceConnection {
                 .isPresent();
     }
 
-    private boolean connectedToOtherVoiceChannel(long voiceChannelId) {
+    boolean connectedToOtherVoiceChannel(long voiceChannelId) {
         return Optional.ofNullable(audioManager.getConnectedChannel())
                 .filter(cvc -> cvc.getIdLong() != voiceChannelId)
                 .isPresent();

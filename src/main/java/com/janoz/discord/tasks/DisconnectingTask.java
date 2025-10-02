@@ -19,7 +19,7 @@ public class DisconnectingTask extends TimerTask{
         new Timer(true).schedule(new DisconnectingTask(voiceConnectionService), CHECK_INTERVAL, CHECK_INTERVAL);
     }
 
-    private DisconnectingTask(VoiceConnectionService voiceConnectionService) {
+    DisconnectingTask(VoiceConnectionService voiceConnectionService) {
         this.voiceConnectionService = voiceConnectionService;
     }
 

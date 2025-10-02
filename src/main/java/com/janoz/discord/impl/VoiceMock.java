@@ -11,27 +11,44 @@ import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
 public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
+
+    private final Guild guild;
+    private final VoiceChannel voiceChannel;
+
+    public VoiceMock() {
+        guild = Guild.builder()
+                .id(1L)
+                .name("guild")
+                .build();
+        voiceChannel = VoiceChannel.builder()
+                .guild(guild)
+                .id(2L)
+                .name("voiceChannel")
+                .build();
+        guild.getVoiceChannels().add(voiceChannel);
+    }
 
     @Getter @Setter
     private Activity botActivity;
 
     @Override
     public Collection<Guild> getGuilds() {
-        return List.of();
+        return List.of(guild);
     }
 
     @Override
     public Guild getGuild(long guildId) {
-        return null;
+        return guildId==1?guild:null;
     }
 
     @Override
     public VoiceChannel getVoiceChannel(long channelId) {
-        return null;
+        return channelId==2?voiceChannel:null;
     }
 
     @Override
@@ -41,17 +58,14 @@ public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
 
     @Override
     public void disconnect(long guildId) {
-
     }
 
     @Override
     public void play(String sampleId, long guildId) {
-
     }
 
     @Override
     public void play(String sampleId, long guildId, long voiceChannelId) {
-
     }
 
     @Override
@@ -70,8 +84,7 @@ public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
     }
 
     @Override
-    public void readSamples(String sampleDirectory, Runnable afterLoaded) {
-
+    public void readSamples(String prefix, File sampleDirectory) {
     }
 
     @Override

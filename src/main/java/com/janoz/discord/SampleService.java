@@ -1,14 +1,13 @@
 package com.janoz.discord;
 
 import com.janoz.discord.domain.Sample;
+import com.janoz.discord.utils.TempZipUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Collection;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @SuppressWarnings("unused")
@@ -19,39 +18,52 @@ public interface SampleService
      * The method processes files with supported audio formats such as mp3, aac,
      * ogg and wav and updates the sample repository with the loaded samples.
      * <p>
-     * If a single audio file contains multiple samples the file should be acompanied
+     * If a single audio file contains multiple samples, the file should be accompanied
      * by a metadata file containing at least the sample name, start and length.
      * <p>
-     * Subdirectories are not supported
+     * The zipfile name is prepended to the sampleId's, unless the sample is defined
+     * in a metadata file.
      *
      * @param sampleZip the zipfile containing audio sample files
+     * @throws IOException
      */
     default void readSamplesZip(String sampleZip) throws IOException {
-        readSamplesZip(new FileInputStream(sampleZip));
+        readSamplesZip(new File(sampleZip));
+    }
+
+    /**
+     * Reads and initializes audio samples from the specified zipfile.
+     * @see #readSamplesZip(String)
+     *
+     * @param sampleZip the zipfile containing audio sample files
+     * @throws IOException
+     */
+    default void readSamplesZip(File sampleZip) throws IOException {
+        readSamplesZip(sampleZip.getName(), new FileInputStream(sampleZip));
     }
 
     /**
      * Reads and initializes audio samples from the specified zipfile stream.
      * @see #readSamplesZip(String)
      *
-     * @param zipStream InputStream of an opened zipfile
+     * @param zipStream InputStream of a zipfile
+     * @throws IOException
      */
     default void readSamplesZip(InputStream zipStream) throws IOException {
-        File tempDir = Files.createTempDirectory("discord-voice-samples").toFile();
-        tempDir.deleteOnExit();
-        ZipInputStream zis = new ZipInputStream(zipStream);
-        ZipEntry zipEntry = zis.getNextEntry();
-        while (zipEntry != null) {
-            if (zipEntry.isDirectory()) {continue;}
-            File file = new File(tempDir, zipEntry.getName());
-            if (file.getParentFile().exists()) {
-                Files.copy(zis, file.toPath());
-                file.deleteOnExit();
-            }
-            zis.closeEntry();
-            zipEntry = zis.getNextEntry();
-        }
-        readSamples(tempDir.getAbsolutePath());
+        readSamplesZip("",zipStream);
+    }
+
+    /**
+     * Reads and initializes audio samples from the specified zipfile stream.
+     * @see #readSamplesZip(String)
+     *
+     * @param idPrefix prefix to be prepended to the sampleId's
+     * @param zipStream InputStream of a zipfile
+     * @throws IOException
+     */
+    default void readSamplesZip(String idPrefix, InputStream zipStream) throws IOException {
+        File tempDir = TempZipUtil.tempUnzip(new ZipInputStream(zipStream),"discord-voice-samples");
+        readSamples(idPrefix, tempDir);
     }
 
     /**
@@ -61,31 +73,29 @@ public interface SampleService
      * <p>
      * If a single audio file contains multiple samples the file should be acompanied
      * by a metadata file containing at least the sample name, start and length.
-     * <p>
-     * Subdirectories are not supported
      *
      * @param sampleDirectory the path to the directory containing audio sample files
      */
     default void readSamples(String sampleDirectory) {
-        readSamples(sampleDirectory, () -> {});
+        readSamples("",new File(sampleDirectory));
     }
 
     /**
      * Reads and initializes audio samples from the specified directory.
      * The method processes files with supported audio formats such as mp3, aac,
-     * ogg and wav and updates the sample repository with the loaded samples.
+     * ogg, and wav and updates the sample repository with the loaded samples.
      * <p>
-     * If a single audio file contains multiple samples the file should be
+     * If a single audio file contains multiple samples, the file should be
      * accompanied by a metadata file containing at least the sample name,
-     * start and length.
+     * start, and length.
      * <p>
-     * Subdirectories are not supported
+     * The prefix is prepended to the sampleId's, unless the sample is defined
+     * in a metadata file .
      *
+     * @param prefix a unique prefix applied to the identifiers of the loaded samples
      * @param sampleDirectory the path to the directory containing audio sample files
-     * @param afterLoaded     a callback function to be executed after the samples
-     *                        have been loaded
      */
-    void readSamples(String sampleDirectory, Runnable afterLoaded);
+    void readSamples(String prefix, File sampleDirectory);
 
     /**
      * Clears all audio samples from the sample repository.
