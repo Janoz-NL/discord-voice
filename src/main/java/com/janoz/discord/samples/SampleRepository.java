@@ -47,19 +47,19 @@ public class SampleRepository {
         if (sampleDirectory.exists() && sampleDirectory.isDirectory()) {
             int oldCount = samples.size();
             Arrays.stream(Objects.requireNonNull(
-                    sampleDirectory.listFiles((file, s) ->
-                                s.toLowerCase(Locale.ROOT).endsWith(".mp3") ||
-                                s.toLowerCase(Locale.ROOT).endsWith(".ogg") ||
-                                s.toLowerCase(Locale.ROOT).endsWith(".aac") ||
-                                s.toLowerCase(Locale.ROOT).endsWith(".wav"))))
+                    sampleDirectory.listFiles((dir, name) ->
+                                name.toLowerCase(Locale.ROOT).endsWith(".mp3") ||
+                                name.toLowerCase(Locale.ROOT).endsWith(".ogg") ||
+                                name.toLowerCase(Locale.ROOT).endsWith(".aac") ||
+                                name.toLowerCase(Locale.ROOT).endsWith(".wav"))))
                         .forEach(f -> this.read(prefix, f));
             log.info("{} samples loaded from '{}'.",
                     samples.size() - oldCount,
                     sampleDirectory.getAbsolutePath());
             //must go deeper
             Arrays.stream(Objects.requireNonNull(
-                    sampleDirectory.listFiles((file, s) ->
-                                file.isDirectory())))
+                    sampleDirectory.listFiles((dir, name) ->
+                               new File(dir,name).isDirectory())))
                         .forEach(f -> readSamples(prefix + '/' + f.getName(), f));
         } else {
             log.error("'{}' doesn't exist or isn't a directory. No samples loaded!", sampleDirectory);
