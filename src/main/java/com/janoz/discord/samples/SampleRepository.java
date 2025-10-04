@@ -60,7 +60,7 @@ public class SampleRepository {
             Arrays.stream(Objects.requireNonNull(
                     sampleDirectory.listFiles((dir, name) ->
                                new File(dir,name).isDirectory())))
-                        .forEach(f -> readSamples(prefix + '/' + f.getName(), f));
+                        .forEach(f -> readSamples(prefix + f.getName() + '/', f));
         } else {
             log.error("'{}' doesn't exist or isn't a directory. No samples loaded!", sampleDirectory);
             throw new IllegalStateException("Unable to initialize sample repository");
@@ -71,7 +71,7 @@ public class SampleRepository {
         Collection<Sample> samples = readMetadata(file).orElseGet( () -> {
             Sample s = new Sample();
             s.setName(makeNice(file.getName()));
-            s.setId(prefix + '/' + file.getName());
+            s.setId(prefix + file.getName());
             return Collections.singleton(s);
         });
         audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHanlder(samples));

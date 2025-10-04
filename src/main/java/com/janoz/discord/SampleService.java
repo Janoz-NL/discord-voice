@@ -39,7 +39,7 @@ public interface SampleService
      * @throws IOException
      */
     default void readSamplesZip(File sampleZip) throws IOException {
-        readSamplesZip(sampleZip.getName(), new FileInputStream(sampleZip));
+        readSamplesZip(sampleZip.getName() + '/', new FileInputStream(sampleZip));
     }
 
     /**
