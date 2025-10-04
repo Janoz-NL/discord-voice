@@ -91,6 +91,7 @@ public class VoiceConnection {
                         player.stopTrack();
                     } catch (InterruptedException e) {
                         log.debug("Timer interrupted");
+                        Thread.currentThread().interrupt();
                     }
                 });
                 timer.start();

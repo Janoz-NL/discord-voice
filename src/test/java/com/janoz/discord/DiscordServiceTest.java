@@ -103,7 +103,7 @@ class DiscordServiceTest {
 
         @Override
         public void setBotActivity(Activity activity) {
-
+            //intentionally left blank
         }
 
         @Override

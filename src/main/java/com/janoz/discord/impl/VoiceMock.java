@@ -9,12 +9,14 @@ import com.janoz.discord.domain.Sample;
 import com.janoz.discord.domain.VoiceChannel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
 
     private final Guild guild;
@@ -58,14 +60,18 @@ public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
 
     @Override
     public void disconnect(long guildId) {
+        log.info("Disconnecting from {}",guildId);
     }
 
     @Override
     public void play(String sampleId, long guildId) {
+        log.info("Playing sample {} on guild {}",sampleId, guildId);
     }
 
     @Override
     public void play(String sampleId, long guildId, long voiceChannelId) {
+        log.info("Playing sample {} on guild {} and voicechannel {}",sampleId, guildId, voiceChannelId);
+
     }
 
     @Override
@@ -85,11 +91,12 @@ public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
 
     @Override
     public void readSamples(String prefix, File sampleDirectory) {
+        log.info("Loading samples with prefix {} from {}.",prefix, sampleDirectory);
     }
 
     @Override
     public void clearSamples() {
-
+        log.info("Clearing samples.");
     }
 
     @Override

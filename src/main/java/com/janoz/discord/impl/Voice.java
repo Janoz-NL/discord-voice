@@ -154,7 +154,7 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                //
+                Thread.currentThread().interrupt();
             }
         }
         voiceConnectionService.getConnection(guildId).play(sampleRepository.getSample(sampleId));
@@ -172,6 +172,7 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
             log.info("Connected to Discord");
         } catch (InterruptedException e) {
             log.info("Interupted while connecting");
+            Thread.currentThread().interrupt();
         }
         return jda;
     }

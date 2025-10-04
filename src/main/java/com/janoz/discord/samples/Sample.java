@@ -29,8 +29,8 @@ public class Sample implements com.janoz.discord.domain.Sample {
     }
 
     public AudioTrack getSample() {
-        AudioTrack sample = this.sample.makeClone();
-        sample.setPosition(start);
-        return sample;
+        AudioTrack clone = this.sample.makeClone();
+        clone.setPosition(start);
+        return clone;
     }
 }

@@ -115,7 +115,7 @@ public class SampleServiceTest {
 
         @Override
         public void clearSamples() {
-
+            //intentionally left blank
         }
 
         @Override

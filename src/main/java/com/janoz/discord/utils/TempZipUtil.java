@@ -39,11 +39,11 @@ public class TempZipUtil {
 
     private static File constructFile(File root, String file) throws IOException {
         File result = new File(root,file);
-        result.deleteOnExit();
         if (!result.getCanonicalPath().startsWith(root.getCanonicalPath())) {
             throw new IOException("Zip Slip vulnerability detected for " + file);
         }
         createDir(result.getParentFile());
+        result.deleteOnExit();
         return result;
     }
 
