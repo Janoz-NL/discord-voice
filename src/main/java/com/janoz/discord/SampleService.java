@@ -25,7 +25,7 @@ public interface SampleService
      * in a metadata file.
      *
      * @param sampleZip the zipfile containing audio sample files
-     * @throws IOException
+     * @throws IOException if an I/O error occurs while reading the zip file
      */
     default void readSamplesZip(String sampleZip) throws IOException {
         readSamplesZip(new File(sampleZip));
@@ -36,7 +36,7 @@ public interface SampleService
      * @see #readSamplesZip(String)
      *
      * @param sampleZip the zipfile containing audio sample files
-     * @throws IOException
+     * @throws IOException if an I/O error occurs while reading the zip file
      */
     default void readSamplesZip(File sampleZip) throws IOException {
         readSamplesZip(sampleZip.getName() + '/', new FileInputStream(sampleZip));
@@ -47,7 +47,7 @@ public interface SampleService
      * @see #readSamplesZip(String)
      *
      * @param zipStream InputStream of a zipfile
-     * @throws IOException
+     * @throws IOException if an I/O error occurs while reading the zip stream
      */
     default void readSamplesZip(InputStream zipStream) throws IOException {
         readSamplesZip("",zipStream);
@@ -59,7 +59,7 @@ public interface SampleService
      *
      * @param idPrefix prefix to be prepended to the sampleId's
      * @param zipStream InputStream of a zipfile
-     * @throws IOException
+     * @throws IOException if an I/O error occurs while reading the zip file
      */
     default void readSamplesZip(String idPrefix, InputStream zipStream) throws IOException {
         File tempDir = TempZipUtil.tempUnzip(new ZipInputStream(zipStream),"discord-voice-samples");
