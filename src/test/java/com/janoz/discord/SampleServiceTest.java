@@ -38,9 +38,9 @@ public class SampleServiceTest {
     void testReadSamplesZip() throws IOException{
         File result = mock(File.class);
 
-        cut.readValidator = (s,f) -> {
-            assertThat(f).isSameAs(result);
-            assertThat(s).isEqualTo("Archive.zip");
+        cut.readValidator = (prefix,file) -> {
+            assertThat(file).isSameAs(result);
+            assertThat(prefix).isEqualTo("Archive.zip/");
         };
 
         try (MockedStatic<TempZipUtil> ziputilMock = mockStatic(TempZipUtil.class)) {
