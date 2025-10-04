@@ -2,7 +2,6 @@ package com.janoz.discord.tasks;
 
 import com.janoz.discord.discord.VoiceConnection;
 import com.janoz.discord.discord.VoiceConnectionService;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,7 +28,6 @@ class DisconnectingTaskTest {
         VoiceConnection connectedButStale = mock(VoiceConnection.class);
         when(connectedButStale.isConnected()).thenReturn(true);
         when(connectedButStale.getLastInteraction()).thenReturn(System.currentTimeMillis()-(15*60*1000L) - 1L);
-        when(connectedButStale.getActiveConnection()).thenReturn(mock(VoiceChannel.class)); //for logging
 
         VoiceConnectionService vcs = mock(VoiceConnectionService.class);
         when(vcs.getAllConnections()).thenReturn(List.of(notConnected, connected, connectedButStale));

@@ -68,14 +68,14 @@ public class SampleRepository {
    }
    
     private void read(String prefix, File file) {
-        Collection<Sample> samples = readMetadata(file).orElseGet( () -> {
+        Collection<Sample> newSamples = readMetadata(file).orElseGet( () -> {
             Sample s = new Sample();
             s.setName(makeNice(file.getName()));
             s.setId(prefix + file.getName());
             return Collections.singleton(s);
         });
-        audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHanlder(samples));
-        samples.forEach(s -> this.samples.put(s.getId(), s));
+        audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHanlder(newSamples));
+        newSamples.forEach(s -> this.samples.put(s.getId(), s));
     }
 
     /**
@@ -90,7 +90,7 @@ public class SampleRepository {
     private Optional<Collection<Sample>> readMetadata(File file) {
         File metadataFile = new File(file.getAbsolutePath() + ".json");
         if (metadataFile.exists() && metadataFile.isFile()) {
-            Collection<Sample> samples = new ArrayList<>();
+            Collection<Sample> newSamples = new ArrayList<>();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(metadataFile);
             String packName = rootNode.get("name").asText();
@@ -108,9 +108,9 @@ public class SampleRepository {
                                 .orElse(""+sample.getName().hashCode()));
                 sample.setStart(jsonSample.get("position").asInt());
                 sample.setLenght(jsonSample.get("length").asInt());
-                samples.add(sample);
+                newSamples.add(sample);
             }
-            return Optional.of(samples);
+            return Optional.of(newSamples);
         }
         return Optional.empty();
     }

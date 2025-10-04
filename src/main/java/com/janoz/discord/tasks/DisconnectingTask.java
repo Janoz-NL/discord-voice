@@ -29,7 +29,6 @@ public class DisconnectingTask extends TimerTask{
         voiceConnectionService.getAllConnections().stream()
                 .filter(VoiceConnection::isConnected)
                 .filter(vc -> vc.getLastInteraction() + MAX_IDLE_TIME < current)
-                .peek(vc -> log.info("Disconnecting from {}", vc.getActiveConnection().getName()))
                 .forEach(VoiceConnection::disconnect);
     }
 }

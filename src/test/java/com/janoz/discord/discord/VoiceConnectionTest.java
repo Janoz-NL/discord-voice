@@ -202,7 +202,7 @@ class VoiceConnectionTest {
         Sample sample = new Sample();
         sample.setSample(src);
         sample.setLenght(0);
-        long previousInteraction = cut.getLastInteraction();
+        previousInteraction = cut.getLastInteraction();
         cut.play(sample);
         verify(player).stopTrack();
         verify(player).startTrack(clone,true);
