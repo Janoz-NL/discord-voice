@@ -149,6 +149,13 @@ public interface DiscordService {
     void play(String sampleId, long guildId, long voiceChannelId);
 
     /**
+     * Shuts down the Discord bot by invoking the shutdown process of the underlying JDA instance.
+     * This operation terminates the bot's connection to Discord and releases associated resources.
+     */
+    default void shutdown() {
+        getJda().shutdown();
+    }
+    /**
      * Retrieves the JDA (Java Discord API) instance associated with the bot.
      * The JDA instance provides access to various Discord functionality, including
      * interacting with guilds, channels, and members.
