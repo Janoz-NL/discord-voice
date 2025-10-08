@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 class DisconnectingTaskTest {
 
 
+    public static final long STALE_TIME = 15 * 60 * 1000L;
 
     @Test
     void testRun() {
@@ -27,12 +29,12 @@ class DisconnectingTaskTest {
         when(connected.getLastInteraction()).thenReturn(System.currentTimeMillis()-1000L);
         VoiceConnection connectedButStale = mock(VoiceConnection.class);
         when(connectedButStale.isConnected()).thenReturn(true);
-        when(connectedButStale.getLastInteraction()).thenReturn(System.currentTimeMillis()-(15*60*1000L) - 1L);
+        when(connectedButStale.getLastInteraction()).thenReturn(System.currentTimeMillis() - STALE_TIME - 1L);
 
         VoiceConnectionService vcs = mock(VoiceConnectionService.class);
         when(vcs.getAllConnections()).thenReturn(List.of(notConnected, connected, connectedButStale));
 
-        DisconnectingTask cut = new DisconnectingTask(vcs);
+        DisconnectingTask cut = new DisconnectingTask(vcs, Duration.ofMillis(STALE_TIME));
         cut.run();
         verify(connectedButStale).disconnect();
 

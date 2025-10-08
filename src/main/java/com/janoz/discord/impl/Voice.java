@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -36,18 +37,15 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
     private final BotManager botManager;
     private final VoiceConnectionService voiceConnectionService;
 
-    public Voice(JDA jda) {
+    private Voice(JDA jda, Duration disconnectAfter) {
         this.jda = jda;
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerLocalSource(playerManager);
         sampleRepository = new SampleRepository(playerManager);
         botManager = new BotManager(jda);
         voiceConnectionService = new VoiceConnectionService(jda, playerManager);
-        DisconnectingTask.startRunning(voiceConnectionService);
-    }
-
-    public Voice(String token) {
-        this(initJDA(token));
+        Optional.ofNullable(disconnectAfter).ifPresent(d ->
+            DisconnectingTask.startRunning(voiceConnectionService, d));
     }
 
     @Override
@@ -177,4 +175,39 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
         return jda;
     }
 
+
+    public static class Builder {
+        private JDA jda;
+        private Duration disconnectAfter = Duration.ofMinutes(15);
+        private boolean mock = false;
+
+        public Builder jda(JDA jda) {
+            this.jda = jda;
+            return this;
+        }
+
+        public Builder token(String token) {
+            this.jda = initJDA(token);
+            return this;
+        }
+
+        public Builder disconnectAfter(Duration disconnectAfter) {
+            this.disconnectAfter = disconnectAfter;
+            return this;
+        }
+
+        public Builder withoutAutoDisconnect() {
+            this.disconnectAfter = null;
+            return this;
+        }
+
+        public Builder asMock() {
+            mock = true;
+            return this;
+        }
+
+        public VoiceContext build() {
+            return mock? new VoiceMock():new Voice(jda,  disconnectAfter);
+        }
+    }
 }

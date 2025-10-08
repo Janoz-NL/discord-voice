@@ -4,22 +4,25 @@ import com.janoz.discord.discord.VoiceConnection;
 import com.janoz.discord.discord.VoiceConnectionService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @Slf4j
 public class DisconnectingTask extends TimerTask{
 
-    private static final long MAX_IDLE_TIME = 15*60*1000L;
     private static final long CHECK_INTERVAL = 5*60*1000L;
 
     private final VoiceConnectionService voiceConnectionService;
 
-    public static void startRunning(VoiceConnectionService voiceConnectionService) {
-        new Timer(true).schedule(new DisconnectingTask(voiceConnectionService), CHECK_INTERVAL, CHECK_INTERVAL);
+    private final long disconnectAfterMs;
+
+    public static void startRunning(VoiceConnectionService voiceConnectionService, Duration disconnectAfter) {
+        new Timer(true).schedule(new DisconnectingTask(voiceConnectionService, disconnectAfter), CHECK_INTERVAL, CHECK_INTERVAL);
     }
 
-    DisconnectingTask(VoiceConnectionService voiceConnectionService) {
+    DisconnectingTask(VoiceConnectionService voiceConnectionService, Duration disconnectAfter) {
+        this.disconnectAfterMs = disconnectAfter.toMillis();
         this.voiceConnectionService = voiceConnectionService;
     }
 
@@ -28,7 +31,7 @@ public class DisconnectingTask extends TimerTask{
         final long current = System.currentTimeMillis();
         voiceConnectionService.getAllConnections().stream()
                 .filter(VoiceConnection::isConnected)
-                .filter(vc -> vc.getLastInteraction() + MAX_IDLE_TIME < current)
+                .filter(vc -> vc.getLastInteraction() + disconnectAfterMs < current)
                 .forEach(VoiceConnection::disconnect);
     }
 }
