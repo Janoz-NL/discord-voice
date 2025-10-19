@@ -84,10 +84,10 @@ public class VoiceConnection {
             }
             player.stopTrack();
             player.startTrack(sample.getSample(),true);
-            if (sample.getLenght()>0) {
+            if (sample.getLength()>0) {
                 timer = new Thread(() -> {
                     try {
-                        Thread.sleep(sample.getLenght());
+                        Thread.sleep(sample.getLength());
                         player.stopTrack();
                     } catch (InterruptedException e) {
                         log.debug("Timer interrupted");

@@ -14,7 +14,7 @@ public class Sample implements com.janoz.discord.domain.Sample {
     private AudioTrack sample;
     private String errorMessage;
     private int start = 0;
-    private int lenght = -1;
+    private int length = -1;
 
     public boolean isValid() {
         return sample!=null;

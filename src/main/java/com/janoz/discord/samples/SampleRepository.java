@@ -107,7 +107,7 @@ public class SampleRepository {
                                 .map(JsonNode::asText)
                                 .orElse(""+sample.getName().hashCode()));
                 sample.setStart(jsonSample.get("position").asInt());
-                sample.setLenght(jsonSample.get("length").asInt());
+                sample.setLength(jsonSample.get("length").asInt());
                 newSamples.add(sample);
             }
             return Optional.of(newSamples);

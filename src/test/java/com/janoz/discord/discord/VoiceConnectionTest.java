@@ -201,7 +201,7 @@ class VoiceConnectionTest {
         doNothing().when(clone).setPosition(0);
         Sample sample = new Sample();
         sample.setSample(src);
-        sample.setLenght(0);
+        sample.setLength(0);
         previousInteraction = cut.getLastInteraction();
         cut.play(sample);
         verify(player).stopTrack();
