@@ -1,5 +1,6 @@
-package com.janoz.discord.samples.impl;
+package com.janoz.discord.discord;
 
+import com.janoz.discord.samples.AbstractSampleLoader;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -11,13 +12,13 @@ import java.io.File;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-public class DiscordSampleLoader extends AbstractSampleLoader<DiscordSample>{
+public class DiscordSampleLoader extends AbstractSampleLoader<DiscordSample> {
 
     private final AudioPlayerManager audioPlayerManager;
 
     @Override
     public void loadSample(File file, Collection<DiscordSample> newSamples) {
-        audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHanlder(newSamples));
+        audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHandler(newSamples));
     }
 
     @Override
@@ -25,7 +26,7 @@ public class DiscordSampleLoader extends AbstractSampleLoader<DiscordSample>{
         return new DiscordSample();
     }
 
-    private record MyLoadResultHanlder(Collection<DiscordSample> samples) implements AudioLoadResultHandler {
+    private record MyLoadResultHandler(Collection<DiscordSample> samples) implements AudioLoadResultHandler {
 
         @Override
         public void trackLoaded(AudioTrack audioTrack) {

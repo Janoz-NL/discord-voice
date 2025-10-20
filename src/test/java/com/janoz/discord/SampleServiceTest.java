@@ -29,7 +29,7 @@ import static org.mockito.Mockito.mockStatic;
 @ExtendWith(MockitoExtension.class)
 public class SampleServiceTest {
 
-    SampleServiceImpl cut = new SampleServiceImpl();
+    final SampleServiceImpl cut = new SampleServiceImpl();
 
     @Captor
     ArgumentCaptor<ZipInputStream> zipInputStreamArgumentCaptor;
@@ -85,9 +85,9 @@ public class SampleServiceTest {
     @Test
     void testReadSamples() {
         AtomicBoolean ran = new AtomicBoolean(false);
-        cut.readValidator = (prefix,direcotry) -> {
+        cut.readValidator = (prefix,directory) -> {
             ran.set(true);
-            assertThat(direcotry).isEqualTo(new File("testDirectory"));
+            assertThat(directory).isEqualTo(new File("testDirectory"));
             assertThat(prefix).isEqualTo("");
         };
         cut.readSamples("testDirectory");

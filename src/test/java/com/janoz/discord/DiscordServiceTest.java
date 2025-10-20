@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DiscordServiceTest {
 
-    DiscordServiceImpl cut = new DiscordServiceImpl();
+    final DiscordServiceImpl cut = new DiscordServiceImpl();
 
     @BeforeEach
     void setUp() {

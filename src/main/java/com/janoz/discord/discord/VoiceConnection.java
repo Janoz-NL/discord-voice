@@ -1,6 +1,5 @@
 package com.janoz.discord.discord;
 
-import com.janoz.discord.samples.impl.DiscordSample;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import lombok.Getter;

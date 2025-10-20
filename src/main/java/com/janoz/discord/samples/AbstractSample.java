@@ -1,4 +1,4 @@
-package com.janoz.discord.samples.impl;
+package com.janoz.discord.samples;
 
 import lombok.Getter;
 import lombok.Setter;

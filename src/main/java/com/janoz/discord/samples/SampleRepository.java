@@ -2,8 +2,6 @@ package com.janoz.discord.samples;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.janoz.discord.samples.impl.AbstractSample;
-import com.janoz.discord.samples.impl.AbstractSampleLoader;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,21 +17,21 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-public class SampleRepository<T extends AbstractSample> {
+public class SampleRepository<S extends AbstractSample> {
 
-    public SampleRepository(AbstractSampleLoader<T> loader) {
+    public SampleRepository(AbstractSampleLoader<S> loader) {
         this.loader = loader;
     }
 
-    private final AbstractSampleLoader<T> loader;
+    private final AbstractSampleLoader<S> loader;
 
-    private final Map<String, T> samples = new HashMap<>();
+    private final Map<String, S> samples = new HashMap<>();
 
-    public T getSample(String id) {
+    public S getSample(String id) {
         return samples.get(id);
     }
 
-    public Collection<T> getSamples() {
+    public Collection<S> getSamples() {
         return Collections.unmodifiableCollection(samples.values());
     }
 
@@ -67,8 +65,8 @@ public class SampleRepository<T extends AbstractSample> {
    }
    
     private void read(String prefix, File file) {
-        Collection<T> newSamples = readMetadata(file).orElseGet( () -> {
-            T s = loader.createSampleObject();
+        Collection<S> newSamples = readMetadata(file).orElseGet( () -> {
+            S s = loader.createSampleObject();
             s.setName(makeNice(file.getName()));
             s.setId(prefix + file.getName());
             return Collections.singleton(s);
@@ -78,18 +76,18 @@ public class SampleRepository<T extends AbstractSample> {
     }
 
     /**
-     * When a metadatafile is found the metadata determines the metadata of the sample.
-     * Other conventions, like relative filname and path as Id and cleaned filename as
+     * When a metadata file is found, the metadata determines the metadata of the sample.
+     * Other conventions, like relative filename and path as Id and cleaned filename as
      * sample name, are ignored.
      *
      * @param file an audio file potentially containing multiple samples
      * @return Collection of samples when a metadata file was found, otherwise empty
      */
     @SneakyThrows
-    private Optional<Collection<T>> readMetadata(File file) {
+    private Optional<Collection<S>> readMetadata(File file) {
         File metadataFile = new File(file.getAbsolutePath() + ".json");
         if (metadataFile.exists() && metadataFile.isFile()) {
-            Collection<T> newSamples = new ArrayList<>();
+            Collection<S> newSamples = new ArrayList<>();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(metadataFile);
             String packName = rootNode.get("name").asText();
@@ -98,7 +96,7 @@ public class SampleRepository<T extends AbstractSample> {
                     .map(JsonNode::asText)
                     .orElse(""+packName.hashCode());
             for (JsonNode jsonSample : rootNode.get("samples")) {
-                T sample = loader.createSampleObject();
+                S sample = loader.createSampleObject();
                 sample.setName(jsonSample.get("name").asText());
                 sample.setId(mainId + "|" +
                         jsonSample

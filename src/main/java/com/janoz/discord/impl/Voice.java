@@ -7,8 +7,8 @@ import com.janoz.discord.domain.Activity;
 import com.janoz.discord.domain.Guild;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.domain.VoiceChannel;
-import com.janoz.discord.samples.impl.DiscordSample;
-import com.janoz.discord.samples.impl.DiscordSampleLoader;
+import com.janoz.discord.discord.DiscordSample;
+import com.janoz.discord.discord.DiscordSampleLoader;
 import com.janoz.discord.samples.SampleRepository;
 import com.janoz.discord.discord.BotManager;
 import com.janoz.discord.discord.VoiceConnectionService;
@@ -171,13 +171,13 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
             jda.awaitReady();
             log.info("Connected to Discord");
         } catch (InterruptedException e) {
-            log.info("Interupted while connecting");
+            log.info("Interrupted while connecting");
             Thread.currentThread().interrupt();
         }
         return jda;
     }
 
-
+    @SuppressWarnings("unused")
     public static class Builder {
         private JDA jda;
         private Duration disconnectAfter = Duration.ofMinutes(15);

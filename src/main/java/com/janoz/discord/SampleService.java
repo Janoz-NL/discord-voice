@@ -16,10 +16,10 @@ public interface SampleService
     /**
      * Reads and initializes audio samples from the specified zipfile.
      * The method processes files with supported audio formats such as mp3, aac,
-     * ogg and wav and updates the sample repository with the loaded samples.
+     * ogg, and wav and updates the sample repository with the loaded samples.
      * <p>
      * If a single audio file contains multiple samples, the file should be accompanied
-     * by a metadata file containing at least the sample name, start and length.
+     * by a metadata file containing at least the sample name, start, and length.
      * <p>
      * The zipfile name is prepended to the sampleId's, unless the sample is defined
      * in a metadata file.
@@ -69,10 +69,10 @@ public interface SampleService
     /**
      * Reads and initializes audio samples from the specified directory.
      * The method processes files with supported audio formats such as mp3, aac,
-     * ogg and wav and updates the sample repository with the loaded samples.
+     * ogg, and wav and updates the sample repository with the loaded samples.
      * <p>
-     * If a single audio file contains multiple samples the file should be acompanied
-     * by a metadata file containing at least the sample name, start and length.
+     * If a single audio file contains multiple samples, the file should be accompanied
+     * by a metadata file containing at least the sample name, start, and length.
      *
      * @param sampleDirectory the path to the directory containing audio sample files
      */
@@ -90,7 +90,7 @@ public interface SampleService
      * start, and length.
      * <p>
      * The prefix is prepended to the sampleId's, unless the sample is defined
-     * in a metadata file .
+     * in a metadata file.
      *
      * @param prefix a unique prefix applied to the identifiers of the loaded samples
      * @param sampleDirectory the path to the directory containing audio sample files

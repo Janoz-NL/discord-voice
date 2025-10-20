@@ -1,6 +1,7 @@
-package com.janoz.discord.samples.impl;
+package com.janoz.discord.discord;
 
 import com.janoz.discord.domain.Sample;
+import com.janoz.discord.samples.AbstractSample;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lombok.Getter;
 import lombok.Setter;
