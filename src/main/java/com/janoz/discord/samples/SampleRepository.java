@@ -2,12 +2,8 @@ package com.janoz.discord.samples;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import lombok.RequiredArgsConstructor;
+import com.janoz.discord.samples.impl.AbstractSample;
+import com.janoz.discord.samples.impl.AbstractSampleLoader;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,18 +19,21 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
-public class SampleRepository {
+public class SampleRepository<T extends AbstractSample> {
 
-    private final AudioPlayerManager audioPlayerManager;
+    public SampleRepository(AbstractSampleLoader<T> loader) {
+        this.loader = loader;
+    }
 
-    private final Map<String, Sample> samples = new HashMap<>();
+    private final AbstractSampleLoader<T> loader;
 
-    public Sample getSample(String id) {
+    private final Map<String, T> samples = new HashMap<>();
+
+    public T getSample(String id) {
         return samples.get(id);
     }
 
-    public Collection<Sample> getSamples() {
+    public Collection<T> getSamples() {
         return Collections.unmodifiableCollection(samples.values());
     }
 
@@ -68,13 +67,13 @@ public class SampleRepository {
    }
    
     private void read(String prefix, File file) {
-        Collection<Sample> newSamples = readMetadata(file).orElseGet( () -> {
-            Sample s = new Sample();
+        Collection<T> newSamples = readMetadata(file).orElseGet( () -> {
+            T s = loader.createSampleObject();
             s.setName(makeNice(file.getName()));
             s.setId(prefix + file.getName());
             return Collections.singleton(s);
         });
-        audioPlayerManager.loadItem(file.getAbsolutePath(), new MyLoadResultHanlder(newSamples));
+        loader.loadSample(file, newSamples);
         newSamples.forEach(s -> this.samples.put(s.getId(), s));
     }
 
@@ -87,19 +86,19 @@ public class SampleRepository {
      * @return Collection of samples when a metadata file was found, otherwise empty
      */
     @SneakyThrows
-    private Optional<Collection<Sample>> readMetadata(File file) {
+    private Optional<Collection<T>> readMetadata(File file) {
         File metadataFile = new File(file.getAbsolutePath() + ".json");
         if (metadataFile.exists() && metadataFile.isFile()) {
-            Collection<Sample> newSamples = new ArrayList<>();
+            Collection<T> newSamples = new ArrayList<>();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(metadataFile);
             String packName = rootNode.get("name").asText();
-            log.info("Reading " + packName);
+            log.info("Reading {}", packName);
             String mainId = rootNode.optional("id")
                     .map(JsonNode::asText)
                     .orElse(""+packName.hashCode());
             for (JsonNode jsonSample : rootNode.get("samples")) {
-                Sample sample = new Sample();
+                T sample = loader.createSampleObject();
                 sample.setName(jsonSample.get("name").asText());
                 sample.setId(mainId + "|" +
                         jsonSample
@@ -117,29 +116,5 @@ public class SampleRepository {
 
     private static String makeNice(String input) {
         return input.substring(0,input.lastIndexOf(".")).replaceAll("[^a-zA-Z0-9/-]"," ");
-    }
-
-
-    private record MyLoadResultHanlder(Collection<Sample> samples) implements AudioLoadResultHandler {
-
-        @Override
-        public void trackLoaded(AudioTrack audioTrack) {
-            samples.forEach(s -> s.setSample(audioTrack));
-        }
-
-        @Override
-        public void playlistLoaded(AudioPlaylist audioPlaylist) {
-            samples.forEach(s -> s.setErrorMessage("Playlists not supported."));
-        }
-
-        @Override
-        public void noMatches() {
-            samples.forEach(s -> s.setErrorMessage("Sample not found."));
-        }
-
-        @Override
-        public void loadFailed(FriendlyException e) {
-            samples.forEach(s -> s.setErrorMessage(e.getMessage()));
-        }
     }
 }

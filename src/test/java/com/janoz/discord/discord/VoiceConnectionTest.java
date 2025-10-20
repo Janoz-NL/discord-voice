@@ -1,6 +1,6 @@
 package com.janoz.discord.discord;
 
-import com.janoz.discord.samples.Sample;
+import com.janoz.discord.samples.impl.DiscordSample;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -187,7 +187,7 @@ class VoiceConnectionTest {
 
     @Test
     void testPlayInvalid() {
-        Sample sample = new Sample();
+        DiscordSample sample = new DiscordSample();
         sample.setErrorMessage("I'm invalid");
         cut.play(sample);
         assertThat(cut.getLastInteraction()).isGreaterThan(previousInteraction);
@@ -199,7 +199,7 @@ class VoiceConnectionTest {
         AudioTrack clone = mock(AudioTrack.class);
         when(src.makeClone()).thenReturn(clone);
         doNothing().when(clone).setPosition(0);
-        Sample sample = new Sample();
+        DiscordSample sample = new DiscordSample();
         sample.setSample(src);
         sample.setLength(0);
         previousInteraction = cut.getLastInteraction();

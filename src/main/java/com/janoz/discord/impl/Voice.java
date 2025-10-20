@@ -7,6 +7,8 @@ import com.janoz.discord.domain.Activity;
 import com.janoz.discord.domain.Guild;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.domain.VoiceChannel;
+import com.janoz.discord.samples.impl.DiscordSample;
+import com.janoz.discord.samples.impl.DiscordSampleLoader;
 import com.janoz.discord.samples.SampleRepository;
 import com.janoz.discord.discord.BotManager;
 import com.janoz.discord.discord.VoiceConnectionService;
@@ -33,7 +35,7 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
 
     @Getter // at least make JDA available to the outside
     private final JDA jda;
-    private final SampleRepository sampleRepository;
+    private final SampleRepository<DiscordSample> sampleRepository;
     private final BotManager botManager;
     private final VoiceConnectionService voiceConnectionService;
 
@@ -41,7 +43,7 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
         this.jda = jda;
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerLocalSource(playerManager);
-        sampleRepository = new SampleRepository(playerManager);
+        sampleRepository = new SampleRepository<>(new DiscordSampleLoader(playerManager));
         botManager = new BotManager(jda);
         voiceConnectionService = new VoiceConnectionService(jda, playerManager);
         Optional.ofNullable(disconnectAfter).ifPresent(d ->
