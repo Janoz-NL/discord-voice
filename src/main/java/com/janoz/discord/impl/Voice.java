@@ -5,6 +5,7 @@ import com.janoz.discord.SampleService;
 import com.janoz.discord.VoiceContext;
 import com.janoz.discord.domain.Activity;
 import com.janoz.discord.domain.Guild;
+import com.janoz.discord.domain.Pack;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.domain.VoiceChannel;
 import com.janoz.discord.discord.DiscordSample;
@@ -85,6 +86,11 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
         return sampleRepository.getSamples().stream()
                 .map(s -> (Sample)s)
                 .toList();
+    }
+
+    @Override
+    public Collection<Pack> getPacks() {
+        return sampleRepository.getPacks();
     }
 
     @Override

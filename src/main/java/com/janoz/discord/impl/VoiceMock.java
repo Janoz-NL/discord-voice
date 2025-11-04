@@ -5,6 +5,7 @@ import com.janoz.discord.SampleService;
 import com.janoz.discord.VoiceContext;
 import com.janoz.discord.domain.Activity;
 import com.janoz.discord.domain.Guild;
+import com.janoz.discord.domain.Pack;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.domain.VoiceChannel;
 import lombok.Getter;
@@ -101,6 +102,11 @@ public class VoiceMock implements SampleService, DiscordService, VoiceContext  {
 
     @Override
     public Collection<Sample> getSamples() {
+        return List.of();
+    }
+
+    @Override
+    public Collection<Pack> getPacks() {
         return List.of();
     }
 

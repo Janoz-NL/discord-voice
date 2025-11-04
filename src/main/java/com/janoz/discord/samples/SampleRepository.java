@@ -2,6 +2,7 @@ package com.janoz.discord.samples;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.janoz.discord.domain.Pack;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,12 +28,18 @@ public class SampleRepository<S extends AbstractSample> {
 
     private final Map<String, S> samples = new HashMap<>();
 
+    private final Map<String, Pack> packs = new HashMap<>();
+
     public S getSample(String id) {
         return samples.get(id);
     }
 
     public Collection<S> getSamples() {
         return Collections.unmodifiableCollection(samples.values());
+    }
+
+    public Collection<Pack> getPacks() {
+        return Collections.unmodifiableCollection(packs.values());
     }
 
     public void clear() {
@@ -69,6 +76,7 @@ public class SampleRepository<S extends AbstractSample> {
             S s = loader.createSampleObject();
             s.setName(makeNice(file.getName()));
             s.setId(prefix + file.getName());
+            getOrCreate(prefix).getSamples().add(s);
             return Collections.singleton(s);
         });
         loader.loadSample(file, newSamples);
@@ -95,6 +103,8 @@ public class SampleRepository<S extends AbstractSample> {
             String mainId = rootNode.optional("id")
                     .map(JsonNode::asText)
                     .orElse(""+packName.hashCode());
+            Pack pack = new Pack(packName, rootNode.get("info").asText());
+            packs.put(mainId, pack);
             for (JsonNode jsonSample : rootNode.get("samples")) {
                 S sample = loader.createSampleObject();
                 sample.setName(jsonSample.get("name").asText());
@@ -105,6 +115,7 @@ public class SampleRepository<S extends AbstractSample> {
                                 .orElse(""+sample.getName().hashCode()));
                 sample.setStart(jsonSample.get("position").asInt());
                 sample.setLength(jsonSample.get("length").asInt());
+                pack.getSamples().add(sample);
                 newSamples.add(sample);
             }
             return Optional.of(newSamples);
@@ -114,5 +125,9 @@ public class SampleRepository<S extends AbstractSample> {
 
     private static String makeNice(String input) {
         return input.substring(0,input.lastIndexOf(".")).replaceAll("[^a-zA-Z0-9/-]"," ");
+    }
+
+    private Pack getOrCreate(String id) {
+        return packs.computeIfAbsent(id, Pack::new);
     }
 }

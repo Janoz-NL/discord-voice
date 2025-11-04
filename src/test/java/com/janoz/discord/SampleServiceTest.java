@@ -1,5 +1,6 @@
 package com.janoz.discord;
 
+import com.janoz.discord.domain.Pack;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.utils.TempZipUtil;
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,11 @@ public class SampleServiceTest {
 
         @Override
         public List<Sample> getSamples() {
+            return List.of();
+        }
+
+        @Override
+        public List<Pack> getPacks() {
             return List.of();
         }
 

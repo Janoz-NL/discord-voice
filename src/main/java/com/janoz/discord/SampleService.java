@@ -1,5 +1,6 @@
 package com.janoz.discord;
 
+import com.janoz.discord.domain.Pack;
 import com.janoz.discord.domain.Sample;
 import com.janoz.discord.utils.TempZipUtil;
 
@@ -110,6 +111,15 @@ public interface SampleService
      * @return a list of Sample objects representing the available audio samples
      */
     Collection<Sample> getSamples();
+
+    /**
+     * Retrieves a list of sample packs currently managed by the system. A sample pack is a collection
+     * of samples. Packs are automatically generated from samples in the samep directory, or samples
+     * created from metadata files.
+     *
+     * @return a list of Pack objects representing the available sample packs.
+     */
+    Collection<Pack> getPacks();
 
     /**
      * Retrieves an audio sample by its unique identifier.

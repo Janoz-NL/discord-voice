@@ -1,11 +1,12 @@
 package com.janoz.discord.samples;
 
+import com.janoz.discord.domain.Sample;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class AbstractSample {
+public abstract class AbstractSample implements Sample {
     private String id;
     private String name;
     private String errorMessage;
