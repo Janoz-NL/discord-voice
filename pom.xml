@@ -17,6 +17,7 @@
         <argLine/>
 
         <jda.version>6.3.2</jda.version>
+        <dave.version>0.1.2</dave.version>
         <lavaplayer.version>2.2.4</lavaplayer.version>
         <lombok.version>1.18.38</lombok.version>
         <jackson.version>2.19.2</jackson.version>
@@ -40,6 +41,33 @@
             <artifactId>JDA</artifactId>
             <version>${jda.version}</version>
         </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>adapter-jda</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>impl-jni</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-darwin</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-win-x86-64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-x86-64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>dev.arbjerg</groupId>
             <artifactId>lavaplayer</artifactId>
@@ -109,5 +137,11 @@
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
+        <repository>
+            <id>lavalink</id>
+            <name>lavalink</name>
+            <url>https://maven.lavalink.dev/snapshots</url>
+        </repository>
+
     </repositories>
 </project>
