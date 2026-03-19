@@ -19,8 +19,13 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import moe.kyokobot.libdave.DaveFactory;
+import moe.kyokobot.libdave.NativeDaveFactory;
+import moe.kyokobot.libdave.jda.LDJDADaveSessionFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.AudioModuleConfig;
+import net.dv8tion.jda.api.audio.dave.DaveSessionFactory;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -172,6 +177,11 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
         builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI);
         builder.setBulkDeleteSplittingEnabled(false);
         builder.setCompression(Compression.NONE);
+
+        DaveFactory daveFactory = new NativeDaveFactory(); // Using native libdave via jni-impl
+        DaveSessionFactory daveSessionFactory = new LDJDADaveSessionFactory(daveFactory);
+        builder.setAudioModuleConfig(new AudioModuleConfig().withDaveSessionFactory(daveSessionFactory));
+
         JDA jda = builder.build();
         try {
             jda.awaitReady();
