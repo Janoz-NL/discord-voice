@@ -18,12 +18,12 @@
 
         <jda.version>6.3.2</jda.version>
         <dave.version>0.1.2</dave.version>
-        <lavaplayer.version>2.2.4</lavaplayer.version>
+        <lavaplayer.version>2.2.6</lavaplayer.version>
         <lombok.version>1.18.38</lombok.version>
         <jackson.version>2.19.2</jackson.version>
 
         <junit.version>5.12.2</junit.version>
-        <assertj.version>3.27.4</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <mockito.version>5.20.0</mockito.version>
     </properties>
 
