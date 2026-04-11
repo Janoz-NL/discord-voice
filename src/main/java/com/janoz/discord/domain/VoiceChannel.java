@@ -9,5 +9,5 @@ public class VoiceChannel {
     private final long id;
     private final String name;
     private final Guild guild;
-    private boolean connected;
+    private final boolean connected;
 }

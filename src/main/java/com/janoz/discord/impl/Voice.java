@@ -89,7 +89,7 @@ public class Voice implements SampleService, DiscordService, VoiceContext {
     @Override
     public Collection<Sample> getSamples() {
         return sampleRepository.getSamples().stream()
-                .map(s -> (Sample)s)
+                .map(Sample.class::cast)
                 .toList();
     }
 
