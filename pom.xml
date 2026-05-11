@@ -54,7 +54,42 @@
 
         <dependency>
             <groupId>moe.kyokobot.libdave</groupId>
-            <artifactId>natives-darwin</artifactId>
+            <artifactId>natives-linux-x86-64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-x86</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-aarch64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-arm</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-musl-x86-64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-musl-x86</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-musl-aarch64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-linux-musl-arm</artifactId>
             <version>${dave.version}</version>
         </dependency>
         <dependency>
@@ -64,7 +99,17 @@
         </dependency>
         <dependency>
             <groupId>moe.kyokobot.libdave</groupId>
-            <artifactId>natives-linux-x86-64</artifactId>
+            <artifactId>natives-win-x86</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-win-aarch64</artifactId>
+            <version>${dave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>moe.kyokobot.libdave</groupId>
+            <artifactId>natives-darwin</artifactId>
             <version>${dave.version}</version>
         </dependency>
 
